@@ -1,4 +1,4 @@
-# Playwright + Behave Example
+# 🧪 Playwright + Behave Example
 
 This repository contains an automated test setup using [Playwright](https://playwright.dev/python/) and [Behave](https://behave.readthedocs.io/en/stable/) for browser-based functional testing using Gherkin syntax.
 
@@ -46,7 +46,7 @@ behave --tags=@search
 
 ---
 
-## 📝 Project Structure
+## 📁 Project Structure
 
 ```
 project-root/
@@ -102,6 +102,43 @@ Feature: DuckDuckGo Search
       | mercadona | mercadona.es    |
       | openai    | openai.com      |
 ```
+
+---
+
+## 📊 Allure Reporting Setup
+
+To enable beautiful and interactive test reports:
+
+### ✅ 1. Install Allure dependencies
+
+```bash
+pip install -r requirements-allure.txt
+```
+
+Make sure you have Allure CLI installed and added to your system PATH:  
+👉 https://github.com/allure-framework/allure2/releases
+
+Check it's working:
+
+```bash
+allure --version
+```
+
+---
+
+### 🚀 2. Run tests and generate report
+
+```bash
+behave -f allure_behave.formatter:AllureFormatter -o reports/
+```
+
+Then view the report:
+
+```bash
+allure serve reports/
+```
+
+This will launch a local server with a visual test dashboard.
 
 ---
 
