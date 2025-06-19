@@ -9,6 +9,7 @@ This repository contains an automated test setup using [Playwright](https://play
 - Includes:
   - `Scenario Outline` with multiple examples
   - Logging and screenshots on error
+  - Playwright **Tracing** support per scenario
   - Clean setup for GitHub
 
 ---
@@ -46,14 +47,42 @@ behave --tags=@search
 
 ---
 
+## 🔍 Playwright Tracing
+
+Playwright Tracing is enabled **per scenario**. Each `.zip` trace file is saved to the `traces/` directory.
+
+### Open a trace file:
+
+```bash
+playwright show-trace traces/Search_openai_and_verify_link.zip
+```
+
+You can also open all trace files in batch:
+
+**Bash**:
+
+```bash
+for f in traces/*.zip; do playwright show-trace "$f"; done
+```
+
+**PowerShell**:
+
+```powershell
+Get-ChildItem -Path traces -Filter *.zip | ForEach-Object { playwright show-trace $_.FullName }
+```
+
+---
+
 ## 📝 Project Structure
 
 ```
 project-root/
 ├── features/
 │   ├── duckduckgo_search.feature
-│   └── steps/
-│       └── duckduckgo_steps.py
+│   ├── steps/
+│   │   └── duckduckgo_steps.py
+│   └── environment.py
+├── traces/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -61,20 +90,13 @@ project-root/
 
 ---
 
-## 🔍 How It Works
-
-- `duckduckgo_search.feature` defines a Scenario Outline with multiple test cases.
-- `duckduckgo_steps.py` contains the step implementations using Playwright sync API.
-- Logs and screenshots are automatically saved if an error occurs.
-
----
-
 ## 🧼 Clean Commands
 
-If you ever want to clean up screenshots or cached data:
+If you ever want to clean up screenshots, traces or cached data:
 
 ```bash
 rm *.png
+rm -r traces/
 find . -type d -name '__pycache__' -exec rm -r {} +
 ```
 
