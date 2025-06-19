@@ -1,2 +1,2 @@
-behave
-playwright
+behave==1.2.6
+playwright==1.52.0
