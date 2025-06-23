@@ -5,11 +5,13 @@ This repository contains an automated test setup using [Playwright](https://play
 ## 🚀 Features
 
 - Uses **DuckDuckGo** to demonstrate search functionality.
-- Structured with `feature` files and Python step definitions.
+- Structured with Gherkin `feature` files, Python step definitions, and **Page Object Model (POM)**.
 - Includes:
   - `Scenario Outline` with multiple examples
-  - Logging and screenshots on error
-  - Playwright **Tracing** support per scenario
+  - Screenshots saved **only on scenario failure**
+  - Playwright **Tracing** enabled **per scenario**, with timestamped `.zip` files
+  - Centralized helper functions (`utils/helpers.py`) for reusable logic
+  - Logging of trace and scenario status
   - Clean setup for GitHub
 
 ---
@@ -49,15 +51,15 @@ behave --tags=@search
 
 ## 🔍 Playwright Tracing
 
-Playwright Tracing is enabled **per scenario**. Each `.zip` trace file is saved to the `traces/` directory.
+Playwright Tracing is enabled **per scenario**. Each `.zip` file is saved to the `traces/` directory with a timestamp.
 
 ### Open a trace file:
 
 ```bash
-playwright show-trace traces/Search_openai_and_verify_link.zip
+playwright show-trace traces/2025-06-23_19-10-12_Search_openai_and_verify_link.zip
 ```
 
-You can also open all trace files in batch:
+### Open all traces (batch):
 
 **Bash**:
 
@@ -73,6 +75,17 @@ Get-ChildItem -Path traces -Filter *.zip | ForEach-Object { playwright show-trac
 
 ---
 
+## 📸 Failure Screenshots
+
+If a scenario fails, a screenshot is saved automatically to the `reports/failures/` directory.  
+Filenames include a timestamp and scenario name, e.g.:
+
+```
+reports/failures/2025-06-23_19-12-45_Search_openai_and_verify_link.png
+```
+
+---
+
 ## 📝 Project Structure
 
 ```
@@ -82,7 +95,13 @@ project-root/
 │   ├── steps/
 │   │   └── duckduckgo_steps.py
 │   └── environment.py
+├── pages/
+│   └── duckduckgo_page.py
+├── utils/
+│   └── helpers.py
 ├── traces/
+├── reports/
+│   └── failures/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -92,10 +111,10 @@ project-root/
 
 ## 🧼 Clean Commands
 
-If you ever want to clean up screenshots, traces or cached data:
+Clean screenshots, traces, and cache:
 
 ```bash
-rm *.png
+rm -r reports/failures/
 rm -r traces/
 find . -type d -name '__pycache__' -exec rm -r {} +
 ```
@@ -124,6 +143,17 @@ Feature: DuckDuckGo Search
       | mercadona | mercadona.es    |
       | openai    | openai.com      |
 ```
+
+---
+
+## 📈 Future Improvements
+
+- Add **Allure Reporting** integration for rich visual reporting
+- Capture **videos per scenario**
+- Add support for **multiple browsers** (Firefox, WebKit)
+- Integrate with **CI/CD pipelines** (GitHub Actions, Jenkins)
+- Add **tag filtering** in `behave.ini`
+- Support **parallel execution** using `pytest-playwright` or similar
 
 ---
 
